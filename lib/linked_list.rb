@@ -17,34 +17,42 @@ class LinkedList
     new_node = Node.new(value)
 
     if @head.nil?
-      @head = new_node
       @tail = new_node
     else
       new_node.next_node = @head
-      @head = new_node
     end
+    @head = new_node
   end
 
   # adds a new node containing 'value' to the end of the list
   # pbq
   def append(value)
     new_node = Node.new(value)
-    puts "Appending value: #{value}"
-
+    # "Appending value: #{value}"
     if @head.nil?
-      puts 'List is empty. Setting head and tail to the new node.'
+      # 'List is empty. Setting head and tail to the new node.'
       @head = new_node
-      @tail = new_node
     else
-      puts "Current tail: #{@tail.value}, adding new node with value #{new_node.value}"
+      # "Current tail: #{@tail.value}, adding new node with value #{new_node.value}"
       @tail.next_node = new_node
-      @tail = new_node
-      puts "New tail is now: #{@tail.value}"
+      # "New tail is now: #{@tail.value}"
     end
+    @tail = new_node
   end
 
   # returns the total number of nodes in the list
-  def size; end
+  def size
+    current = @head
+    count = 0
+
+    # traverse the lsit and count nodes
+    while current
+      count += 1
+      current = current.next_node
+    end
+
+    count
+  end
 
   # returns the first node in the list
   attr_reader :head
@@ -53,16 +61,44 @@ class LinkedList
   attr_reader :tail
 
   # returns the node at the given index
-  def at(index); end
+  def at(index)
+    current = @head
+    while index.positive?
+      index -= 1
+      current = current.next_node
+    end
+    current
+  end
 
   # removes the last element from the list
-  def pop; end
+  def pop
+    return nil if @head.nil?
+
+    if @head == @tail
+      @head = nil
+      @tail = nil
+    else
+      second_to_last = at(size - 2)
+      second_to_last.next_node = nil
+      @tail = second_to_last
+    end
+  end
 
   # returns True if the passed in value is in the list and otherwise returns False
   def contains?(value); end
 
   # returns the index of the node containing value, or nil if not found
-  def find(value); end
+  def find(value)
+    current = @head
+
+    while current
+      return true if current.value == value
+
+      current = current.next_node
+    end
+
+    false
+  end
 
   # represent a LinkedList object as strings, for printing or previewing
   # ( value ) -> ( value ) -> nil
@@ -77,12 +113,3 @@ class LinkedList
     str
   end
 end
-
-list = LinkedList.new
-list.append(10)
-list.append(20)
-list.append(30)
-
-puts list
-
-puts list.head.value
