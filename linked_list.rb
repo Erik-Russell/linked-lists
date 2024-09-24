@@ -14,24 +14,32 @@ class LinkedList
   # adds a new node containing 'value' to the start of the list
   # ptq
   def prepend(value)
+    new_node = Node.new(value)
+
     if @head.nil?
-      @head = value
-      @tail = value
+      @head = new_node
+      @tail = new_node
     else
-      Node.next_node = @head
-      @head = entry
+      new_node.next_node = @head
+      @head = new_node
     end
   end
 
   # adds a new node containing 'value' to the end of the list
   # pbq
   def append(value)
+    new_node = Node.new(value)
+    puts "Appending value: #{value}"
+
     if @head.nil?
-      @head = value
-      @tail = value
+      puts 'List is empty. Setting head and tail to the new node.'
+      @head = new_node
+      @tail = new_node
     else
-      @tail.next_node = value
-      @tail = entry
+      puts "Current tail: #{@tail.value}, adding new node with value #{new_node.value}"
+      @tail.next_node = new_node
+      @tail = new_node
+      puts "New tail is now: #{@tail.value}"
     end
   end
 
@@ -39,10 +47,10 @@ class LinkedList
   def size; end
 
   # returns the first node in the list
-  def head; end
+  attr_reader :head
 
   # returns the last node in the list
-  def tail; end
+  attr_reader :tail
 
   # returns the node at the given index
   def at(index); end
@@ -58,5 +66,23 @@ class LinkedList
 
   # represent a LinkedList object as strings, for printing or previewing
   # ( value ) -> ( value ) -> nil
-  def to_s; end
+  def to_s
+    current = @head
+    str = ''
+    while current
+      str += "( #{current.value} ) -> "
+      current = current.next_node
+    end
+    str += 'nil'
+    str
+  end
 end
+
+list = LinkedList.new
+list.append(10)
+list.append(20)
+list.append(30)
+
+puts list
+
+puts list.head.value
